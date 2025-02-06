@@ -202,6 +202,11 @@ static void on_button_go_clicked(
     gpointer   user_data
 );
 
+static void on_entry_activated(
+    GtkWidget* self,
+    gpointer   user_data
+);
+
 //
 // GTK TYPE DEFINITIONS & CTORS
 //
@@ -375,6 +380,13 @@ static void wintc_welcome_user_list_init(
         self->button_go,
         "clicked",
         G_CALLBACK(on_button_go_clicked),
+        self
+    );
+
+    g_signal_connect(
+        self->entry_password,
+        "activate",
+        G_CALLBACK(on_entry_activated),
         self
     );
 
@@ -1077,3 +1089,11 @@ static void on_button_go_clicked(
     );
 }
 
+static void on_entry_activated(
+    WINTC_UNUSED(GtkWidget* self),
+    gpointer   user_data
+)
+{
+    WinTCWelcomeUserList* user_list = WINTC_WELCOME_USER_LIST(user_data);
+    g_signal_emit_by_name(user_list->button_go, "clicked");
+}
